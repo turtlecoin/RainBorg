@@ -276,6 +276,7 @@ namespace RainBorg
                         {
                             // Create message
                             var builder = new EmbedBuilder();
+                            builder.ImageUrl = DonationImages[r.Next(0, DonationImages.Count)];
                             builder.WithTitle("UH OH");
                             builder.WithColor(Color.Green);
                             builder.Description = String.Format(tipBalanceError, String.Format("{0:n}", tipMin + tipFee - tipBalance));

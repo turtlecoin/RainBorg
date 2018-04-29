@@ -83,7 +83,7 @@ namespace RainBorg
             },
             DonationImages = new List<string>
             {
-                ""
+                "https://i.imgur.com/SZgzfAC.png"
             };
 
         private static string
