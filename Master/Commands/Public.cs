@@ -17,9 +17,10 @@ namespace RainBorg.Commands
             // Get balance
             using (WebClient client = new WebClient())
             {
-                string dl = client.DownloadString(Constants.BalanceURL);
+                string dl = client.DownloadString(RainBorg.balanceURL);
+
                 JObject j = JObject.Parse(dl);
-                RainBorg.tipBalance = (double)j["balance"] / 100;
+                RainBorg.tipBalance = (double)j["balance"];
             }
 
             double i = RainBorg.tipMin - RainBorg.tipBalance;
@@ -32,10 +33,8 @@ namespace RainBorg.Commands
         [Command("donate")]
         public async Task DonateAsync([Remainder]string Remainder = null)
         {
-            string m = "Want to donate to keep the rain a-pouring? What a great turtle you are! :)\n\n";
-            m += "To donate, simply send some TRTL to the following address, REMEMBER to use the provided payment ID, or else your funds will NOT reach the tip pool.\n";
-            m += "```Address:\n" + RainBorg.botAddress + "\n";
-            m += "Payment ID (INCLUDE THIS):\n" + RainBorg.botPaymentId + "```";
+            string m = "Want to donate to keep the rain a-pouring? GREAT :)\n\n";
+            m += "To donate, simply send some tips to the bot";
             await Context.Message.Author.SendMessageAsync(m);
         }
 
@@ -50,9 +49,9 @@ namespace RainBorg.Commands
             if (RainBorg.Operators.Contains(Context.Message.Author.Id))
             {
                 m += "Op-only message:\nOperator-only command documentation can be found at:\n";
-                m += "https://github.com/BrandonT42/RainBorg/wiki/Operator-Commands\n";
+                m += RainBorg.Messages["wikiURLop"] + "\n";
             }
-            m += "Need more help? Check the wiki link below to learn how to be a part of the rain:\n" + RainBorg.wikiURL;
+            m += "Need more help? Check the wiki link below to learn how to be a part of the rain:\n" + RainBorg.Messages["wikiURL"];
             await Context.Message.Author.SendMessageAsync(m);
         }
 

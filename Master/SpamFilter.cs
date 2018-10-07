@@ -12,7 +12,7 @@ namespace RainBorg
         // Checks a message for spam
         private Task CheckForSpamAsync(SocketUserMessage message, out bool result)
         {
-        
+
             // Purposely left empty to keep spam filters private
 
             // Completed

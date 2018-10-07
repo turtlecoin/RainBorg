@@ -22,7 +22,7 @@ namespace RainBorg.Commands
                 await ReplyAsync("Blacklisted users, they will receive no tips.");
                 try
                 {
-                    
+
                     IEmote emote = Context.Guild.Emotes.First(e => e.Name == RainBorg.successReact);
                     await Context.Message.AddReactionAsync(emote);
                 }
@@ -51,7 +51,7 @@ namespace RainBorg.Commands
                 await ReplyAsync("Blacklisted users, they will receive no tips.");
                 try
                 {
-                    
+
                     IEmote emote = Context.Guild.Emotes.First(e => e.Name == RainBorg.successReact);
                     await Context.Message.AddReactionAsync(emote);
                 }
@@ -73,7 +73,7 @@ namespace RainBorg.Commands
                 await ReplyAsync("Removed users from blacklist, they may receive tips again.");
                 try
                 {
-                    
+
                     IEmote emote = Context.Guild.Emotes.First(e => e.Name == RainBorg.successReact);
                     await Context.Message.AddReactionAsync(emote);
                 }
@@ -99,7 +99,7 @@ namespace RainBorg.Commands
                 await ReplyAsync("Removed users from blacklist, they may receive tips again.");
                 try
                 {
-                    
+
                     IEmote emote = Context.Guild.Emotes.First(e => e.Name == RainBorg.successReact);
                     await Context.Message.AddReactionAsync(emote);
                 }
@@ -121,7 +121,7 @@ namespace RainBorg.Commands
                         EmbedBuilder builder = new EmbedBuilder();
                         builder.WithColor(Color.Green);
                         builder.WithTitle("SPAM WARNING");
-                        builder.Description = RainBorg.spamWarning;
+                        builder.Description = RainBorg.Messages["spamWarning"];
 
                         RainBorg.Greylist.Add(user.Id);
                         await RainBorg.RemoveUserAsync(user, 0);
@@ -129,7 +129,7 @@ namespace RainBorg.Commands
                     }
                 try
                 {
-                    
+
                     IEmote emote = Context.Guild.Emotes.First(e => e.Name == RainBorg.successReact);
                     await Context.Message.AddReactionAsync(emote);
                 }
@@ -153,7 +153,7 @@ namespace RainBorg.Commands
                             EmbedBuilder builder = new EmbedBuilder();
                             builder.WithColor(Color.Green);
                             builder.WithTitle("SPAM WARNING");
-                            builder.Description = RainBorg.spamWarning;
+                            builder.Description = RainBorg.Messages["spamWarning"];
 
                             RainBorg.Greylist.Add(user);
                             await RainBorg.RemoveUserAsync(Context.Client.GetUser(user), 0);
@@ -163,7 +163,7 @@ namespace RainBorg.Commands
                     catch { }
                 try
                 {
-                    
+
                     IEmote emote = Context.Guild.Emotes.First(e => e.Name == RainBorg.successReact);
                     await Context.Message.AddReactionAsync(emote);
                 }

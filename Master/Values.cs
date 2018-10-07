@@ -15,12 +15,16 @@ namespace RainBorg
 
         public static string
             _username = "RainBorg",
-            _version = "1.8",
+            _version = "1.9",
             _timezone = TimeZone.CurrentTimeZone.StandardName,
-            botAddress = "TRTLv12WtKJAzTNtxSkbcXf7mjeVApSqRYACtoJE2X52UBSce7qGAQ1JQgG3MmArnZSbkJXKqBXiPX2Mno7xD4tqD3p8SySoBc5",
-            botPaymentId = "bca975edfe710a64337beb1685f32ab900989aa9767946efd8537f09db594bbd",
             successReact = "kthx",
-            waitNext = "";
+            waitNext = "",
+            tipTrigger = ".tip",
+            tipCurrency = "TRTL",
+            botToken = "NEED_THIS_GET_IT_AND_PUT_IT_HERE",
+            balanceURL = "",
+            botPrefix = "$";
+
 
         public static double
             tipBalance = 0,
@@ -40,7 +44,9 @@ namespace RainBorg
 
             accountAge = 3,
 
-            timeoutPeriod = 30;
+            timeoutPeriod = 30,
+
+            discordPermissions = 76864;
 
         public static List<ulong>
             Operators = new List<ulong>(),
@@ -52,6 +58,22 @@ namespace RainBorg
 
         public static Dictionary<ulong, string>
             Blacklist = new Dictionary<ulong, string>();
+
+        public static Dictionary<string, string>
+            Messages = new Dictionary<string, string>()
+             {
+                {"rainTitle", "TUT TUT"},
+                {"rain1", "Huzzah, "},
+                {"rain2", " just rained on "},
+                {"rain3", " chatty turtle"},
+                {"tipBalanceErrorTitle", "UH OH"},
+                {"tipBalanceError", "My tipjar balance was too low to send out a tip, consider donating to keep the rain a-pouring!\n\nTo donate, simply send me tips.\n"},
+                {"entranceMessage", ""},
+                {"exitMessage", ""},
+                {"wikiURL", "https,//github.com/turtlecoin/turtlecoin/wiki/RainBorg-Wat-Dat"},
+                {"wikiURLop", "https,//github.com/turtlecoin/rainborg/wiki/Operator-Commands"},
+                {"spamWarning", "You've been issued a spam warning, this means you won't be included in my next tip. Complaining about this is the best way to get blacklisted to never receive tips in the future"}
+             };
 
         [JsonExtensionData]
         public static Dictionary<ulong, List<ulong>>
@@ -65,16 +87,7 @@ namespace RainBorg
             ChannelWeight = new List<ulong>(),
             StatusChannel = new List<ulong>();
 
-        public static string
-            tipBalanceError = "My tip balance was too low to send out a tip, consider donating {0} TRTL to keep the rain a-pouring!\n\n" +
-                "To donate, simply send some TRTL to the following address, REMEMBER to use the provided payment ID, or else your funds will NOT reach the tip pool.\n" +
-                "```Address:\n" + botAddress + "\n" + "Payment ID (INCLUDE THIS):\n" + botPaymentId + "```",
-            entranceMessage = "",
-            exitMessage = "",
-            wikiURL = "https://github.com/Sajo811/turtlewiki/wiki/RainBorg-Wat-Dat",
-            spamWarning = "You've been issued a spam warning, this means you won't be included in my next tip. Try to be a better turtle, okay? ;) Consider reading up on how to be a good turtle:\nhttps://medium.com/@turtlecoin/how-to-be-a-good-turtle-20a427028a18";
-
-        private static List<string>
+        public static List<string>
             RaindanceImages = new List<string>
             {
                 "https://i.imgur.com/6zJpNZx.png",

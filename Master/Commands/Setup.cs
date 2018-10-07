@@ -21,8 +21,8 @@ namespace RainBorg.Commands
                         RainBorg.UserPools.Add(Id, new List<ulong>());
                         for (int i = 0; i < Weight; i++) RainBorg.ChannelWeight.Add(Id);
                         await Config.Save();
-                        if (RainBorg.entranceMessage != "")
-                            await (Context.Client.GetChannel(Id) as SocketTextChannel).SendMessageAsync(RainBorg.entranceMessage);
+                        if (RainBorg.Messages["entranceMessage"] != "")
+                            await (Context.Client.GetChannel(Id) as SocketTextChannel).SendMessageAsync(RainBorg.Messages["entranceMessage"]);
                         try
                         {
                             // Add reaction to message
@@ -51,8 +51,8 @@ namespace RainBorg.Commands
                         RainBorg.UserPools.Add(Channel.Id, new List<ulong>());
                         for (int i = 0; i < Weight; i++) RainBorg.ChannelWeight.Add(Channel.Id);
                         await Config.Save();
-                        if (RainBorg.entranceMessage != "")
-                            await (Context.Client.GetChannel(Channel.Id) as SocketTextChannel).SendMessageAsync(RainBorg.entranceMessage);
+                        if (RainBorg.Messages["entranceMessage"] != "")
+                            await (Context.Client.GetChannel(Channel.Id) as SocketTextChannel).SendMessageAsync(RainBorg.Messages["entranceMessage"]);
                         try
                         {
                             // Add reaction to message

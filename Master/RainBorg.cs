@@ -135,7 +135,7 @@ namespace RainBorg
 
             // Register commands and start bot
             await RegisterCommandsAsync();
-            await _client.LoginAsync(TokenType.Bot, Constants.BotToken);
+            await _client.LoginAsync(TokenType.Bot, RainBorg.botToken);
             await _client.StartAsync();
 
             // Resume if told to
@@ -160,11 +160,11 @@ namespace RainBorg
         private Task Ready()
         {
             // Show start up message in all tippable channels
-            if (Startup && entranceMessage != "")
+            if (Startup && Messages["entranceMessage"] != "")
             {
                 _client.CurrentUser.ModifyAsync(m => { m.Username = _username; });
-                foreach(ulong ChannelId in UserPools.Keys)
-                    (_client.GetChannel(ChannelId) as SocketTextChannel).SendMessageAsync(entranceMessage);
+                foreach (ulong ChannelId in UserPools.Keys)
+                    (_client.GetChannel(ChannelId) as SocketTextChannel).SendMessageAsync(Messages["entranceMessage"]);
                 Startup = false;
             }
 
@@ -179,7 +179,26 @@ namespace RainBorg
             Console.WriteLine(arg);
 
             // Relaunch if disconnected
-            if (arg.Message.Contains("Disconnected"))
+
+            try
+            {
+                if (arg.Message.Contains("Disconnected"))
+                {
+                    Console.WriteLine("{0} {1}    Relaunching bot...", DateTime.Now.ToString("HH:mm:ss"), "RainBorg");
+                    Paused = true;
+                    JObject Resuming = new JObject
+                    {
+                        ["userPools"] = JToken.FromObject(UserPools),
+                        ["greylist"] = JToken.FromObject(Greylist),
+                        ["userMessages"] = JToken.FromObject(UserMessages)
+                    };
+                    File.WriteAllText(Constants.ResumeFile, Resuming.ToString());
+                    Process.Start("RelaunchUtility.exe", "RainBorg.exe");
+                    ConsoleEventCallback(2);
+                    Environment.Exit(0);
+                }
+            }
+            catch (NullReferenceException)
             {
                 Console.WriteLine("{0} {1}    Relaunching bot...", DateTime.Now.ToString("HH:mm:ss"), "RainBorg");
                 Paused = true;
@@ -194,6 +213,7 @@ namespace RainBorg
                 ConsoleEventCallback(2);
                 Environment.Exit(0);
             }
+
 
             // Completed
             return Task.CompletedTask;
@@ -235,7 +255,7 @@ namespace RainBorg
 
             // Check if message is a commmand
             int argPos = 0;
-            if (message.HasStringPrefix(Constants.BotPrefix, ref argPos) ||
+            if (message.HasStringPrefix(RainBorg.botPrefix, ref argPos) ||
                 message.HasMentionPrefix(_client.CurrentUser, ref argPos))
             {
                 // Execute command and log errors to console
@@ -259,9 +279,10 @@ namespace RainBorg
                     // Get balance
                     using (WebClient client = new WebClient())
                     {
-                        string dl = client.DownloadString(Constants.BalanceURL);
+                        string dl = client.DownloadString(RainBorg.balanceURL);
+
                         JObject j = JObject.Parse(dl);
-                        tipBalance = (double)j["balance"] / 100;
+                        tipBalance = (double)j["balance"];
                     }
 
                     // Check tip balance against minimum tip
@@ -277,9 +298,10 @@ namespace RainBorg
                             // Create message
                             var builder = new EmbedBuilder();
                             builder.ImageUrl = DonationImages[r.Next(0, DonationImages.Count)];
-                            builder.WithTitle("UH OH");
+                            builder.WithTitle(RainBorg.Messages["tipBalanceErrorTitle"]);
+
                             builder.WithColor(Color.Green);
-                            builder.Description = String.Format(tipBalanceError, String.Format("{0:n}", tipMin + tipFee - tipBalance));
+                            builder.Description = RainBorg.Messages["tipBalanceError"];
 
                             // Cast message to all status channels
                             foreach (ulong u in StatusChannel)
@@ -330,7 +352,7 @@ namespace RainBorg
                             DateTime tipTime = DateTime.Now;
                             Console.WriteLine("{0} {1}      Sending tip of {2} to {3} users in channel #{4}", DateTime.Now.ToString("HH:mm:ss"), "Tipper",
                                 tipAmount.ToString("F"), UserPools[ChannelId].Count, _client.GetChannel(ChannelId));
-                            string m = ".tip " + tipAmount.ToString("F") + " ";
+                            string m = RainBorg.tipTrigger + " " + tipAmount.ToString("F") + " ";
 
                             // Loop through user pool and add them to tip
                             for (int i = 0; i < UserPools[ChannelId].Count; i++)
@@ -368,14 +390,14 @@ namespace RainBorg
 
                             // Begin building status message
                             var builder = new EmbedBuilder();
-                            builder.WithTitle("TUT TUT");
+                            builder.WithTitle(RainBorg.Messages["rainTitle"]);
                             builder.ImageUrl = RaindanceImages[r.Next(0, RaindanceImages.Count)];
-                            builder.Description = "Huzzah, " + tipTotal + " TRTL just rained on " + userCount +
-                                " chatty turtle";
+                            builder.Description = RainBorg.Messages["rain1"] + tipTotal + " " + RainBorg.tipCurrency + RainBorg.Messages["rain2"] + userCount +
+                                RainBorg.Messages["rain3"];
                             if (UserPools[ChannelId].Count > 1) builder.Description += "s";
                             builder.Description += " in #" + _client.GetChannel(ChannelId) + ", they ";
                             if (UserPools[ChannelId].Count > 1) builder.Description += "each ";
-                            builder.Description += "got " + tipAmount + " TRTL!";
+                            builder.Description += "got " + tipAmount + " " + RainBorg.tipCurrency + "!";
                             builder.WithColor(Color.Green);
 
                             // Send status message to all status channels
@@ -514,8 +536,8 @@ namespace RainBorg
             // Exiting
             if (eventType == 2)
             {
-                if (exitMessage != "") foreach (KeyValuePair<ulong, List<ulong>> Entry in UserPools)
-                    (_client.GetChannel(Entry.Key) as SocketTextChannel).SendMessageAsync(exitMessage).GetAwaiter().GetResult();
+                if (Messages["exitMessage"] != "") foreach (KeyValuePair<ulong, List<ulong>> Entry in UserPools)
+                        (_client.GetChannel(Entry.Key) as SocketTextChannel).SendMessageAsync(Messages["exitMessage"]).GetAwaiter().GetResult();
                 Config.Save().GetAwaiter().GetResult();
             }
             return false;
