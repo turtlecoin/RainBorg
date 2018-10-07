@@ -12,7 +12,7 @@ namespace RainBorg
         public DateTime Date { get; }
         public double Amount { get; }
         public ulong Channel { get; }
-        public Tip (DateTime date, ulong channel, double amount)
+        public Tip(DateTime date, ulong channel, double amount)
         {
             Date = date;
             Amount = amount;

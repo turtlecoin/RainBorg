@@ -3,13 +3,9 @@ namespace RainBorg
     class Constants
     {
         // Files
-        public const string StatSheet = "Stats.json";
-        public const string Config = "Config.conf";
-        public const string ResumeFile = "Pools.json";
+        public const string StatSheet = "RainBorg_Stats.json";
+        public const string Config = "RainBorg_Config.json";
+        public const string ResumeFile = "RainBorg_Pools.json";
 
-        // Bot Values
-        public const string BotToken = "";
-        public const string BalanceURL = "";
-        public const string BotPrefix = "$";
     }
 }

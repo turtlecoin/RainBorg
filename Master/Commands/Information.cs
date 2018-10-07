@@ -18,19 +18,20 @@ namespace RainBorg.Commands
             {
                 using (WebClient client = new WebClient())
                 {
-                    string dl = client.DownloadString(Constants.BalanceURL);
+                    string dl = client.DownloadString(RainBorg.balanceURL);
+
                     JObject j = JObject.Parse(dl);
-                    RainBorg.tipBalance = (double)j["balance"] / 100;
+                    RainBorg.tipBalance = (double)j["balance"];
                 }
 
                 double i = RainBorg.tipMin + RainBorg.tipFee - RainBorg.tipBalance;
                 if (i < 0) i = 0;
 
-                string m = "```Current tip balance: " + String.Format("{0:n}", RainBorg.tipBalance) + " TRTL\n" +
-                    "Amount needed for next tip: " + String.Format("{0:n}", i) + " TRTL\n" +
+                string m = "```Current tip balance: " + String.Format("{0:n}", RainBorg.tipBalance) + " " + RainBorg.tipCurrency + "\n" +
+                    "Amount needed for next tip: " + String.Format("{0:n}", i) + " " + RainBorg.tipCurrency + "\n" +
                     "Next tip at: " + RainBorg.waitNext + "\n" +
-                    "Tip minimum: " + String.Format("{0:n}", RainBorg.tipMin) + " TRTL\n" +
-                    "Tip maximum: " + String.Format("{0:n}", RainBorg.tipMax) + " TRTL\n" +
+                    "Tip minimum: " + String.Format("{0:n}", RainBorg.tipMin) + " " + RainBorg.tipCurrency + "\n" +
+                    "Tip maximum: " + String.Format("{0:n}", RainBorg.tipMax) + " " + RainBorg.tipCurrency + "\n" +
                     "Minimum users: " + RainBorg.userMin + "\n" +
                     "Maximum users: " + RainBorg.userMax + "\n" +
                     "Minimum wait time: " + String.Format("{0:n0}", RainBorg.waitMin) + "s (" + TimeSpan.FromSeconds(RainBorg.waitMin).ToString() + ")\n" +
@@ -155,27 +156,27 @@ namespace RainBorg.Commands
                 if (Stats.ChannelStats.ContainsKey(Id))
                 {
                     m += "#" + Context.Client.GetChannel(Id) + " Channel Stats:\n";
-                    m += "Total TRTL Sent: " + String.Format("{0:n}", Stats.ChannelStats[Id].TotalAmount) + " TRTL\n";
+                    m += "Total " + RainBorg.tipCurrency + " Sent: " + String.Format("{0:n}", Stats.ChannelStats[Id].TotalAmount) + " " + RainBorg.tipCurrency + "\n";
                     m += "Total Tips Sent: " + Stats.ChannelStats[Id].TotalTips + "\n";
-                    m += "Average Tip: " + String.Format("{0:n}", Stats.ChannelStats[Id].TipAverage) + " TRTL";
+                    m += "Average Tip: " + String.Format("{0:n}", Stats.ChannelStats[Id].TipAverage) + " " + RainBorg.tipCurrency;
                 }
 
                 // User stats
                 else if (Stats.UserStats.ContainsKey(Id))
                 {
                     m += "@" + Context.Client.GetUser(Id).Username + " User Stats:\n";
-                    m += "Total TRTL Sent: " + String.Format("{0:n}", Stats.UserStats[Id].TotalAmount) + " TRTL\n";
+                    m += "Total " + RainBorg.tipCurrency + " Sent: " + String.Format("{0:n}", Stats.UserStats[Id].TotalAmount) + " " + RainBorg.tipCurrency + "\n";
                     m += "Total Tips Sent: " + Stats.UserStats[Id].TotalTips + "\n";
-                    m += "Average Tip: " + String.Format("{0:n}", Stats.UserStats[Id].TipAverage) + " TRTL";
+                    m += "Average Tip: " + String.Format("{0:n}", Stats.UserStats[Id].TipAverage) + " " + RainBorg.tipCurrency;
                 }
 
                 // Global stats
                 else
                 {
                     m += "Global Stats:\n";
-                    m += "Total TRTL Sent: " + String.Format("{0:n}", Stats.GlobalStats.TotalAmount) + " TRTL\n";
+                    m += "Total " + RainBorg.tipCurrency + " Sent: " + String.Format("{0:n}", Stats.GlobalStats.TotalAmount) + " " + RainBorg.tipCurrency + "\n";
                     m += "Total Tips Sent: " + Stats.GlobalStats.TotalTips + "\n";
-                    m += "Average Tip: " + String.Format("{0:n}", Stats.GlobalStats.TipAverage) + " TRTL";
+                    m += "Average Tip: " + String.Format("{0:n}", Stats.GlobalStats.TipAverage) + " " + RainBorg.tipCurrency;
                 }
 
                 m += "```";
