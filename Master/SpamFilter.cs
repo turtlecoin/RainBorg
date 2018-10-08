@@ -1,3 +1,7 @@
+// Copyright (c) 2018, BrandonT42, The TurtleCoin Developers
+//
+// Please see the included LICENSE file for more information.
+
 using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
