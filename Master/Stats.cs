@@ -1,4 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
+﻿// Copyright (c) 2018, BrandonT42, The TurtleCoin Developers
+//
+// Please see the included LICENSE file for more information.
+
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;

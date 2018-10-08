@@ -1,4 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
+﻿// Copyright (c) 2018, BrandonT42, The TurtleCoin Developers
+//
+// Please see the included LICENSE file for more information.
+
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -25,6 +29,7 @@ namespace RainBorg
                 RainBorg.accountAge = (int)Config["accountAge"];
                 RainBorg.timeoutPeriod = (int)Config["timeoutPeriod"];
                 RainBorg.logLevel = (int)Config["logLevel"];
+                RainBorg.logLevelDiscord = (int)Config["logLevelDiscord"];
                 RainBorg.Operators = Config["operators"].ToObject<List<ulong>>();
                 RainBorg.Blacklist = Config["blacklist"].ToObject<Dictionary<ulong, string>>();
                 RainBorg.Messages = Config["messages"].ToObject<Dictionary<string, string>>();
@@ -61,6 +66,7 @@ namespace RainBorg
                 ["accountAge"] = RainBorg.accountAge,
                 ["timeoutPeriod"] = RainBorg.timeoutPeriod,
                 ["logLevel"] = RainBorg.logLevel,
+                ["logLevelDiscord"] = RainBorg.logLevelDiscord,
                 ["operators"] = JToken.FromObject(RainBorg.Operators),
                 ["blacklist"] = JToken.FromObject(RainBorg.Blacklist),
                 ["messages"] = JToken.FromObject(RainBorg.Messages),

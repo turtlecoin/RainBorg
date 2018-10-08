@@ -1,4 +1,8 @@
-﻿using Discord;
+﻿// Copyright (c) 2018, BrandonT42, The TurtleCoin Developers
+//
+// Please see the included LICENSE file for more information.
+
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Newtonsoft.Json.Linq;

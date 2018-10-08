@@ -1,4 +1,8 @@
-﻿using Discord.Commands;
+﻿// Copyright (c) 2018, BrandonT42, The TurtleCoin Developers
+//
+// Please see the included LICENSE file for more information.
+
+using Discord.Commands;
 using Discord.WebSocket;
 using Newtonsoft.Json;
 using System;
@@ -16,7 +20,6 @@ namespace RainBorg
         public static string
             _username = "RainBorg",
             _version = "1.9",
-            _timezone = TimeZone.CurrentTimeZone.StandardName,
             successReact = "kthx",
             waitNext = "",
             tipTrigger = ".tip",
@@ -37,6 +40,7 @@ namespace RainBorg
             userMin = 1,
             userMax = 20,
             logLevel = 1,
+            logLevelDiscord = 0,
 
             waitMin = 1 * 60,
             waitMax = 1 * 60,

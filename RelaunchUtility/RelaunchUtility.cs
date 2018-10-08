@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Copyright (c) 2018, BrandonT42, The TurtleCoin Developers
+//
+// Please see the included LICENSE file for more information.
+
+using System;
 using System.Diagnostics;
 using System.Threading;
 

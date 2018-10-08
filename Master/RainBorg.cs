@@ -1,4 +1,8 @@
-﻿using Discord;
+﻿// Copyright (c) 2018, BrandonT42, The TurtleCoin Developers
+//
+// Please see the included LICENSE file for more information.
+
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
@@ -45,67 +49,7 @@ namespace RainBorg
             {
                 UserTimeout();
             }).Start();
-
-            // Get console commands
-            string command = "";
-            while (command.ToLower() != "exit")
-            {
-                // Get command
-                command = Console.ReadLine();
-
-                if (command.ToLower().StartsWith("dotip"))
-                {
-                    Waiting = waitTime;
-                    Console.WriteLine("Tip sent.");
-                }
-                else if (command.ToLower().StartsWith("reset"))
-                {
-                    foreach (KeyValuePair<ulong, List<ulong>> Entry in UserPools)
-                        Entry.Value.Clear();
-                    Greylist.Clear();
-                    Console.WriteLine("Pools reset.");
-                }
-                else if (command.ToLower().StartsWith("loglevel"))
-                {
-                    logLevel = int.Parse(command.Substring(command.IndexOf(' ')));
-                    Config.Save();
-                    Console.WriteLine("Log level changed.");
-                }
-                else if (command.ToLower().StartsWith("say"))
-                {
-                    foreach (ulong Channel in StatusChannel)
-                        (_client.GetChannel(Channel) as SocketTextChannel).SendMessageAsync(command.Substring(command.IndexOf(' ')));
-                    Console.WriteLine("Sent message.");
-                }
-                else if (command.ToLower().StartsWith("addoperator"))
-                {
-                    if (!Operators.Contains(ulong.Parse(command.Substring(command.IndexOf(' ')))))
-                        Operators.Add(ulong.Parse(command.Substring(command.IndexOf(' '))));
-                    Console.WriteLine("Added operator.");
-                }
-                else if (command.ToLower().StartsWith("removeoperator"))
-                {
-                    if (Operators.Contains(ulong.Parse(command.Substring(command.IndexOf(' ')))))
-                        Operators.Remove(ulong.Parse(command.Substring(command.IndexOf(' '))));
-                    Console.WriteLine("Removed operator.");
-                }
-                else if (command.ToLower().StartsWith("restart"))
-                {
-                    Console.WriteLine("{0} {1}    Relaunching bot...", DateTime.Now.ToString("HH:mm:ss"), "RainBorg");
-                    Paused = true;
-                    JObject Resuming = new JObject
-                    {
-                        ["userPools"] = JToken.FromObject(UserPools),
-                        ["greylist"] = JToken.FromObject(Greylist),
-                        ["userMessages"] = JToken.FromObject(UserMessages)
-                    };
-                    File.WriteAllText(Constants.ResumeFile, Resuming.ToString());
-                    Process.Start("RelaunchUtility.exe", "RainBorg.exe");
-                    ConsoleEventCallback(2);
-                    Environment.Exit(0);
-                }
-            }
-
+            
             // Completed, exit bot
             return Task.CompletedTask;
         }
@@ -113,8 +57,19 @@ namespace RainBorg
         // Initiate bot
         public async Task RunBotAsync()
         {
+            // Load local files
+            Console.WriteLine("{0} {1}    Loading config", DateTime.Now.ToString("HH:mm:ss"), "RainBorg");
+            await Config.Load();
+            Console.WriteLine("{0} {1}    Loaded config", DateTime.Now.ToString("HH:mm:ss"), "RainBorg");
+            Console.WriteLine("{0} {1}    Loading stats", DateTime.Now.ToString("HH:mm:ss"), "RainBorg");
+            await Stats.Load();
+            Console.WriteLine("{0} {1}    Loaded stats", DateTime.Now.ToString("HH:mm:ss"), "RainBorg");
+
             // Populate API variables
-            _client = new DiscordSocketClient();
+            _client = new DiscordSocketClient(new DiscordSocketConfig
+            {
+                LogLevel = (LogSeverity)logLevelDiscord
+            });
             _commands = new CommandService();
             _services = new ServiceCollection()
                 .AddSingleton(_client)
@@ -125,13 +80,6 @@ namespace RainBorg
             _client.Log += Log;
             _client.Ready += Ready;
 
-            // Load local files
-            Console.WriteLine("{0} {1}    Loading config", DateTime.Now.ToString("HH:mm:ss"), "RainBorg");
-            await Config.Load();
-            Console.WriteLine("{0} {1}    Loaded config", DateTime.Now.ToString("HH:mm:ss"), "RainBorg");
-            Console.WriteLine("{0} {1}    Loading stats", DateTime.Now.ToString("HH:mm:ss"), "RainBorg");
-            await Stats.Load();
-            Console.WriteLine("{0} {1}    Loaded stats", DateTime.Now.ToString("HH:mm:ss"), "RainBorg");
 
             // Register commands and start bot
             await RegisterCommandsAsync();
@@ -184,7 +132,7 @@ namespace RainBorg
             {
                 if (arg.Message.Contains("Disconnected"))
                 {
-                    Console.WriteLine("{0} {1}    Relaunching bot...", DateTime.Now.ToString("HH:mm:ss"), "RainBorg");
+                    Console.WriteLine("{0} {1}    Relaunching bot...", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), "RainBorg");
                     Paused = true;
                     JObject Resuming = new JObject
                     {
@@ -200,7 +148,7 @@ namespace RainBorg
             }
             catch (NullReferenceException)
             {
-                Console.WriteLine("{0} {1}    Relaunching bot...", DateTime.Now.ToString("HH:mm:ss"), "RainBorg");
+                Console.WriteLine("{0} {1}    Relaunching bot...", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), "RainBorg");
                 Paused = true;
                 JObject Resuming = new JObject
                 {
@@ -430,8 +378,8 @@ namespace RainBorg
                 if (waitMin < waitMax)
                     waitTime = r.Next(waitMin, waitMax);
                 else waitTime = 10 * 60 * 1000;
-                waitNext = DateTime.Now.AddSeconds(waitTime).ToString("HH:mm:ss") + " " + _timezone;
-                Console.WriteLine("{0} {1}      Next tip in {2} seconds ({3})", DateTime.Now.ToString("HH:mm:ss"), "Tipper", waitTime, waitNext);
+                waitNext = DateTime.Now.AddSeconds(waitTime).ToString("yyyy-MM-dd HH:mm:ss");
+                Console.WriteLine("{0} {1}      Next tip in {2} seconds ({3})", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), "Tipper", waitTime, waitNext);
 
                 // Wait for X seconds
                 Waiting = 0;
